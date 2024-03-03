@@ -4,7 +4,7 @@ import Signup from "../components/Authentication/Signup";
 
 export default function Home() {
   return (
-    <Container maxWidth="xl" centerContent>
+    <Container maxWidth="xl" centerContent display="flex" alignContent="center" justifyContent="center">
       <Box d="flex" justifyContent='center' textAlign="center" p={3} bg={"white"} w='100%' m="40px 0 15px 0" borderRadius="lg" borderWidth="1px">
         <Text fontSize="4xl" fontFamily="Work sans" color="black">Let`s Chat</Text>
       </Box>
