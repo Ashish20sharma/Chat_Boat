@@ -2,10 +2,12 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, V
 import React, { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 export default function Signup() {
     const [show, setShow] = useState(false)
     const [signup, setSignup] = useState([])
     const toast = useToast()
+    const navigate=useNavigate()
     function handleClick() {
         setShow(!show)
     }
@@ -15,19 +17,29 @@ export default function Signup() {
         formdata.append("email", signup.email)
         formdata.append("password", signup.password)
         formdata.append("pic", signup.pic)
-        
+        if (signup.email === undefined || signup.password === undefined ||signup.name===undefined) {
+          return  toast({
+                title: 'Please fill details.',
+                description: "Register details are empty.",
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+                position:"top-right"
+            })
+        }
         if (signup.password === signup.Cpassword) {
             axios.post("/user/register", formdata, { header: { "Content-Type": "multipart/form-data" } }).then((res, err) => {
                 if(res.status===200){
                     toast({
-                        title: 'RE=egister Success.',
-                        description: "Password and Conform password is not matching.",
+                        title: 'Register Success.',
+                        description: "You created new account in chatboat.",
                         status: 'success',
                         duration: 9000,
                         isClosable: true,
                         position:"top-right"
                     })
                     localStorage.setItem("user",JSON.stringify(res.data))
+                    navigate("/chats")
                 }else if (202){
                     toast({
                         title:res.data.message,
@@ -38,7 +50,6 @@ export default function Signup() {
                         position:"top-right"
                     })
                 }
-                console.log(res.data)
             })
         } else {
             toast({
