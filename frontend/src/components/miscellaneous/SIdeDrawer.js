@@ -1,14 +1,29 @@
-import { Drawer, Avatar, Box, Button, Drawer, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tooltip, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, DrawerFooter } from '@chakra-ui/react'
-import React, { useRef } from 'react'
+import {  Avatar, Box, Button, Drawer, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tooltip, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, useToast } from '@chakra-ui/react'
+import React, { useRef, useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import ProfileModel from './ProfileModel'
 import { useNavigate } from 'react-router-dom'
 
 function SIdeDrawer() {
+    const [search,setSearch]=useState("")
     const navigate = useNavigate()
     const { user } = ChatState()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
+    const toast=useToast()
+    const handleSearch=()=>{
+        if(!search){
+            toast({
+                title: 'Please Enter something in search.',
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position:"top-left"
+            })
+            return;
+        }
+    }
+
     const handleLogout = () => {
         localStorage.removeItem("user")
         navigate("/")
@@ -57,18 +72,22 @@ function SIdeDrawer() {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-                    <DrawerHeader>Create your account</DrawerHeader>
-
+                    <DrawerHeader>Search User</DrawerHeader>
                     <DrawerBody>
-                        <Input placeholder='Type here...' />
+                        <Box display="flex" pb={2}>
+                        <Input placeholder='Search by name or email' mr={2} value={search} onInput={(e)=>setSearch(e.target.value)}/>
+                        <Button onClick={()=>handleSearch()}>
+                            Go
+                        </Button>
+                        </Box>
                     </DrawerBody>
 
-                    <DrawerFooter>
+                    {/* <DrawerFooter>
                         <Button variant='outline' mr={3} onClick={onClose}>
                             Cancel
                         </Button>
                         <Button colorScheme='blue'>Save</Button>
-                    </DrawerFooter>
+                    </DrawerFooter> */}
                 </DrawerContent>
             </Drawer>
         </div>

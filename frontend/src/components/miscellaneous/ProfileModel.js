@@ -2,12 +2,10 @@ import { Button, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalCon
 import React from 'react'
 
 function ProfileModel({ user, children }) {
-    console.log(children)
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
             {children ? (<span onClick={onOpen}>{children}</span>) : (<IconButton display={{ base: "flex" }} icon={<i class="ri-eye-line"></i>} onClick={onOpen} />)}
-            <Button onClick={onOpen}>Open Modal</Button>
 
             <Modal size="lg" isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
