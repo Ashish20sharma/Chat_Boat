@@ -3,15 +3,19 @@ import React, { useRef, useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import ProfileModel from './ProfileModel'
 import { useNavigate } from 'react-router-dom'
-
+import  axios from "axios"
+import ChatLoading from '../ChatLoading'
+import UserListItem from '../UserAvatar/UserListItem'
 function SIdeDrawer() {
     const [search,setSearch]=useState("")
+    const [loading,setLoading] =useState()
+    const [searchResult,setSearchResult] =useState([])
     const navigate = useNavigate()
     const { user } = ChatState()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
     const toast=useToast()
-    const handleSearch=()=>{
+    const handleSearch=async()=>{
         if(!search){
             toast({
                 title: 'Please Enter something in search.',
@@ -22,6 +26,33 @@ function SIdeDrawer() {
             })
             return;
         }
+        try {
+            setLoading(true)
+
+            const config={
+                header:{
+                    Autherization:`Bearer ${user.token}`
+                }
+            }
+
+            const {data}=await axios.get(`/searchUser/search/${search}`,config)
+            console.log(data)
+            setLoading(false)
+            setSearchResult(data.user)
+        } catch (error) {
+            toast({
+                title: 'Error Occured!.',
+                description:'Failed to Load the Search Result',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position:"top-left"
+            })
+        }
+    }
+
+    const accessChat=(chat)=>{
+        
     }
 
     const handleLogout = () => {
@@ -80,6 +111,11 @@ function SIdeDrawer() {
                             Go
                         </Button>
                         </Box>
+                        {loading?(<ChatLoading/>):
+                        searchResult.map((user)=>{
+                            return <UserListItem 
+                            key={user._id} user={user} handleFunction={()=>accessChat(user._id)} />
+                        })}
                     </DrawerBody>
 
                     {/* <DrawerFooter>
