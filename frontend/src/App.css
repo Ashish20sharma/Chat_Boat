@@ -9,3 +9,7 @@
     background-size: cover;
     /* color: black; */
 }
+
+::-webkit-scrollbar{
+    width: 0;
+}
