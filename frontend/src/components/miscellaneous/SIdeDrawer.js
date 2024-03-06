@@ -30,7 +30,7 @@ function SIdeDrawer() {
             setLoading(true)
 
             const config={
-                header:{
+                headers:{
                     Autherization:`Bearer ${user.token}`
                 }
             }
