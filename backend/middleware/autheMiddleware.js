@@ -3,7 +3,6 @@ const asyncHandler=require("express-async-handler");
 const userModel = require("../Models/userModel");
 const protect=asyncHandler(async(req,res,next)=>{
     let token;
-    console.log(req.headers.autherization)
     if(req.headers.autherization && req.headers.autherization.startsWith("Bearer")){
         try {
             token=req.headers.autherization.split(" ")[1];
