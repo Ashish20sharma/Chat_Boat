@@ -72,7 +72,7 @@ chatRouter.post("/createGroupChat", protect, async (req, res) => {
     }
 
     var users = JSON.parse(req.body.users);
-   
+
     if (users.length < 2) {
         return res.status(400).send("More than 2 users are required to form a group chat")
     }
@@ -80,20 +80,68 @@ chatRouter.post("/createGroupChat", protect, async (req, res) => {
     users.push(req.user);
 
     try {
-        const groupChat= await chatModel.create({
-            chatName:req.body.name,
-            isGroupChat:true,
-            users:users,
-            groupAdmin:req.user,
+        const groupChat = await chatModel.create({
+            chatName: req.body.name,
+            isGroupChat: true,
+            users: users,
+            groupAdmin: req.user,
         });
-        const fullGroupChat=await chatModel.findOne({_id:groupChat._id})
-        .populate("users","-password")
-        .populate("groupAdmin","-password")
+        const fullGroupChat = await chatModel.findOne({ _id: groupChat._id })
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password")
 
         res.status(200).json(fullGroupChat)
     } catch (error) {
         res.status(400)
         throw new Error(error.message)
     }
+})
+
+chatRouter.put("/updateGroupName/:id", protect, async (req, res) => {
+    const id = req.params.id;
+    try {
+        const Updated = await chatModel.findOneAndUpdate({ _id: id }, {
+            chatName: req.body.name,
+        }, { new: true }).populate("users", "-password")
+            .populate("groupAdmin", "-password")
+        res.status(200).json({ message: "Group name Updated", result: Updated })
+    } catch (error) {
+        res.status(400).json(error.message)
+    }
+
+})
+
+chatRouter.post("/addToGroup", protect, async (req, res) => {
+    const { chatId, userId } = req.body;
+
+   const added= await chatModel.findOneAndUpdate({ _id: chatId },
+        {
+            $push: { users: userId }
+        }, { new: true }).populate("users", "-password").populate("groupAdmin", "-password");
+
+        if(!added){
+            res.status(400)
+            throw new Error("Not added to chat")
+        }else{
+            res.status(200).json(added)
+        }
+
+})
+
+chatRouter.post("/removeFromGroup", protect, async (req, res) => {
+    const { chatId, userId } = req.body;
+
+   const remove= await chatModel.findOneAndUpdate({ _id: chatId },
+        {
+            $pull: { users: userId }
+        }, { new: true }).populate("users", "-password").populate("groupAdmin", "-password");
+
+        if(!remove){
+            res.status(400)
+            throw new Error("Not removed to chat")
+        }else{
+            res.status(200).json(remove)
+        }
+
 })
 module.exports = { chatRouter };
