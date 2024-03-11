@@ -144,4 +144,5 @@ chatRouter.post("/removeFromGroup", protect, async (req, res) => {
         }
 
 })
+
 module.exports = { chatRouter };

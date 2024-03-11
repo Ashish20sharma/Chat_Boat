@@ -11,7 +11,7 @@ function SIdeDrawer() {
     const [loading,setLoading] =useState()
     const [searchResult,setSearchResult] =useState([])
     const navigate = useNavigate()
-    const { user } = ChatState()
+    const { user,setSelectedChat ,chats,setChats} = ChatState()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
     const toast=useToast()
@@ -51,8 +51,30 @@ function SIdeDrawer() {
         }
     }
 
-    const accessChat=(chat)=>{
-        
+    const accessChat=async(userId)=>{
+        try {
+            setLoading(true);
+
+            const config={
+                headers:{
+                    "content-type":"application/json",
+                    Autherization:`Bearer ${user.token}`
+                }
+            }
+
+            const {data}=await axios.post("/chat/accessChat",{userId},config)
+
+            setSelectedChat(data);
+        } catch (error) {
+            toast({
+                title: 'Error fetching the chats!.',
+                description:error.message,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position:"top-left"
+            })
+        }
     }
 
     const handleLogout = () => {
