@@ -47,7 +47,7 @@ chatRouter.post("/accessChat", protect, async (req, res) => {
 
 chatRouter.get("/fetchChats", protect, async (req, res) => {
     try {
-        chatModel.find({ users: { $elemMatch: { $eq: req.user._id } } })
+        chatModel.find({ users: { $elemMatch: { $eq: req.user.id } } })
             .populate("users", "-password")
             .populate("groupAdmin")
             .populate("latestMessages")

@@ -7,14 +7,16 @@ import { ChatState } from '../../Context/ChatProvider';
 function MyChats() {
   const [loggedUser, setLoggedUser] = useState()
   const {selectedChat,setSelectedChat,user,chats,setChats}=ChatState();
+  console.log(user);
   const toast=useToast();
   const fetchChats=async ()=>{
     try {
       const config={
         headers:{
-          Authorization:`Bearer ${user.token}`
+          Autherization:`Bearer ${user.token}`
         }
       }
+      console.log(config)
      const {data}= await axios.get("/chat/fetchChats",config);
       setChats(data)
     } catch (error) {

@@ -51,7 +51,7 @@ function SIdeDrawer() {
         }
     }
 
-    const accessChat=async(userId)=>{
+    const accessChat=async(UserId)=>{
         try {
             setLoading(true);
 
@@ -62,7 +62,7 @@ function SIdeDrawer() {
                 }
             }
 
-            const {data}=await axios.post("/chat/accessChat",{userId},config)
+            const {data}=await axios.post("/chat/accessChat",{UserId},config)
 
             setSelectedChat(data);
         } catch (error) {
