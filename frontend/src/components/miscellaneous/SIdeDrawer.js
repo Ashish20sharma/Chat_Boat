@@ -124,8 +124,8 @@ function SIdeDrawer() {
             >
                 <DrawerOverlay />
                 <DrawerContent>
-                    <DrawerCloseButton />
                     <DrawerHeader>Search User</DrawerHeader>
+                    <DrawerCloseButton />
                     <DrawerBody>
                         <Box display="flex" pb={2}>
                         <Input placeholder='Search by name or email' mr={2} value={search} onInput={(e)=>setSearch(e.target.value)}/>

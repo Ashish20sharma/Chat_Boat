@@ -7,8 +7,8 @@ userSearchRoute.get("/Search/:name", authMiddleware, async function (req, res) {
 
     const user = await userModel.find({
         "$or": [
-            { name: { $regex: req.params.name } },
-            { email: { $regex: req.params.name } }
+            { name: { $regex: req.params.name, $options: "i" } },
+            { email: { $regex: req.params.name, $options: "i" } }
         ]
     }).find({ _id: { $ne: req.user._id } })
     res.status(200).json({ message: "User found", user: user })

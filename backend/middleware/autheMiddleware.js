@@ -1,6 +1,7 @@
 const jwt=require("jsonwebtoken");
 const asyncHandler=require("express-async-handler");
 const userModel = require("../Models/userModel");
+
 const protect=asyncHandler(async(req,res,next)=>{
     let token;
     if(req.headers.autherization && req.headers.autherization.startsWith("Bearer")){
