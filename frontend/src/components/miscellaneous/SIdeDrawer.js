@@ -1,4 +1,4 @@
-import {  Avatar, Box, Button, Drawer, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tooltip, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, useToast } from '@chakra-ui/react'
+import {  Avatar, Box, Button, Drawer, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, Tooltip, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, useToast, Spinner } from '@chakra-ui/react'
 import React, { useRef, useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider'
 import ProfileModel from './ProfileModel'
@@ -8,7 +8,7 @@ import ChatLoading from '../ChatLoading'
 import UserListItem from '../UserAvatar/UserListItem'
 function SIdeDrawer() {
     const [search,setSearch]=useState("")
-    const [loading,setLoading] =useState()
+    const [loading,setLoading] =useState(false)
     const [searchResult,setSearchResult] =useState([])
     const navigate = useNavigate()
     const { user,setSelectedChat ,chats,setChats} = ChatState()
@@ -64,7 +64,11 @@ function SIdeDrawer() {
 
             const {data}=await axios.post("/chat/accessChat",{UserId},config)
 
+            if(!chats.find((c)=>c._id === data._id)) setChats([data,...chats])
+
             setSelectedChat(data);
+            setLoading(false);
+            onClose();
         } catch (error) {
             toast({
                 title: 'Error fetching the chats!.',
@@ -138,6 +142,7 @@ function SIdeDrawer() {
                             return <UserListItem 
                             key={user._id} user={user} handleFunction={()=>accessChat(user._id)} />
                         })}
+                        {loading && <Spinner ml="auto" display="flex"/>}
                     </DrawerBody>
 
                     {/* <DrawerFooter>

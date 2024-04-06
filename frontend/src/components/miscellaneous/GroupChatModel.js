@@ -5,12 +5,13 @@ import { ChatState } from '../../Context/ChatProvider';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
 import UserBadgeItem from '../UserAvatar/UserBadgeItem';
+import { json } from 'react-router-dom';
 
 function GroupChatModel({ children }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const initialRef = React.useRef(null)
     const finalRef = React.useRef(null)
-    const { user } = ChatState();
+    const { user,chats,setChats} = ChatState();
     const [GrooupChatName, setGroupChatName] = useState();
     const [serach, setSearch] = useState('');
     const [searchResult, setSearchResult] = useState([]);
@@ -51,9 +52,7 @@ function GroupChatModel({ children }) {
         });
         setselectedUser(remove);
     }
-    const handleSubmit = () => {
-    }
-
+    
     const handleGroup = (userToAdd) => {
         if (selectedUser.includes(userToAdd)) {
             toast({
@@ -66,6 +65,45 @@ function GroupChatModel({ children }) {
             return;
         }
         setselectedUser([...selectedUser, userToAdd]);
+    }
+    const handleSubmit = async() => {
+        if(!GrooupChatName || selectedUser.length==0){
+            toast({
+                title: 'Please fill all the fields.',
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+                position: "top-left"
+            });
+            return;
+        }
+        else{
+            try {
+                const config={
+                    headers:{Autherization:`Bearer ${user.token}`}
+                }
+                const {data}=await axios.post("/chat/createGroupChat/",{name:GrooupChatName,users:JSON.stringify(selectedUser.map((u)=>u._id))},config);
+                setChats([data,...chats])
+                onClose();
+                toast({
+                    title: 'New Group is created.',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                    position: "top-left"
+                });
+            } catch (error) {
+                toast({
+                    title: 'The Group is not craeted.',
+                    description:`${error.message}`,
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                    position: "top-left"
+                });
+            }
+        }
+        
     }
     return (
         <>
