@@ -18,6 +18,7 @@ function MyChats({fetchAgain}) {
         }
       }
       const { data } = await axios.get("/chat/fetchChats", config);
+      console.log(data)
       setChats(data)
     } catch (error) {
       toast({
