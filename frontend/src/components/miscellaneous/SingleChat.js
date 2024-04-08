@@ -3,6 +3,7 @@ import { ChatState } from '../../Context/ChatProvider'
 import { Box, IconButton, Text } from '@chakra-ui/react';
 import { getSender, getSenderFull } from '../../config/chatLogics';
 import ProfileModel from './ProfileModel';
+import UpdateGroupChatModel from './UpdateGroupChatModel';
 
 function SingleChat({ fetchAgain, setFetchAgain }) {
     const { user, selectedChat, setSelectedChat } = ChatState();
@@ -18,9 +19,14 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
                 (
                     <>
                     {selectedChat.chatName.toUpperCase()}
+                    {<UpdateGroupChatModel fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}/>}
                     </>
                 )}
             </Text>
+            <Box display="flex" flexDir="column" justifyContent="flex-end" p={3} bg="#E8E8E8" w="100%" h="100%" border="lg"
+            overflow="hidden">
+                {/* {messages} */}
+            </Box>
             </>) : (
                 <Box display="flex" alignItems="center" justifyContent="center" h="100%">
                     <Text fontSize="3xl" pb={3} fontFamily="work sans">
