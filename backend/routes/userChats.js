@@ -97,19 +97,22 @@ chatRouter.post("/createGroupChat", protect, async (req, res) => {
     }
 })
 
-chatRouter.put("/updateGroupName/:id", protect, async (req, res) => {
-    const id = req.params.id;
-    try {
-        const Updated = await chatModel.findOneAndUpdate({ _id: id }, {
-            chatName: req.body.name,
+chatRouter.put("/updateGroupName", protect, async (req, res) => {
+    const {chatId,chatName} = req.body;
+    
+        const Updated = await chatModel.findByIdAndUpdate(chatId, {
+            chatName
         }, { new: true }).populate("users", "-password")
             .populate("groupAdmin", "-password")
-        res.status(200).json({ message: "Group name Updated", result: Updated })
-    } catch (error) {
-        res.status(400).json(error.message)
-    }
+        if(!Updated){
+            res.status(201);
+            throw new Error("Chat not found")
+        }else{
+            res.json(Updated)
+        }
+});
 
-})
+
 
 chatRouter.post("/addToGroup", protect, async (req, res) => {
     const { chatId, userId } = req.body;
@@ -128,7 +131,7 @@ chatRouter.post("/addToGroup", protect, async (req, res) => {
 
 })
 
-chatRouter.post("/removeFromGroup", protect, async (req, res) => {
+chatRouter.put("/removeFromGroup", protect, async (req, res) => {
     const { chatId, userId } = req.body;
 
    const remove= await chatModel.findOneAndUpdate({ _id: chatId },

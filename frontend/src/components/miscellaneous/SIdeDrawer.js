@@ -35,8 +35,7 @@ function SIdeDrawer() {
                 }
             }
 
-            const {data}=await axios.get(`/searchUser/search/${search}`,config)
-            console.log(data)
+            const {data}=await axios.get(`/searchUser/Search/${search}`,config)
             setLoading(false)
             setSearchResult(data.user)
         } catch (error) {
