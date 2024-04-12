@@ -101,7 +101,6 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
             }
 
             const {data}=await axios.get(`/searchUser/Search/${search}`,config)
-            console.log(data)
             setLoading(false)
             setSearchResult(data.user)
         } catch (error) {
@@ -216,7 +215,7 @@ const UpdateGroupChatModel = ({ fetchAgain, setFetchAgain }) => {
                             <Button variant="solid" colorScheme='teal' ml={1} isLoading={renameloading} onClick={handleRename}>Update</Button>
                         </FormControl>
                         <FormControl>
-                            <Input placeholder="Add User to Group" mb={3}  onChange={(e) => handleSearch(e.target.value)} />
+                            <Input placeholder="Add User to Group" mb={3} value={search} onInput={(e) => handleSearch(e.target.value)} />
                         </FormControl>
                         {loading ?<Spinner size="lg"/>:
                         (

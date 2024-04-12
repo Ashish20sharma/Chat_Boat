@@ -24,7 +24,6 @@ chatRouter.post("/accessChat", protect, async (req, res) => {
         path: "latestMessage.sender",
         select: "name pic email"
     })
-
     if (isChat.length > 0) {
         res.send(isChat[0])
     } else {
