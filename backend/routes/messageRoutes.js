@@ -39,4 +39,13 @@ messageRoute.post("/",protect,async(req,res)=>{
 
 });
 
+messageRoute.get("/:chatId",protect,async(req,res)=>{
+    try {
+        const messages=await messageModel.find({chat:req.params.chatId}).populate("sender","name pic email").populate("chat");
+        res.json(messages);
+    } catch (error) {
+        res.status(400).json({message:error.message});
+    }
+})
+
 module.exports=messageRoute;
