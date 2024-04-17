@@ -59,7 +59,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
                 setnewMessage("")
                 const { data } =await axios.post("/message/", { content: newMessage, chatId: selectedChat._id }, config);
                 // console.log(data)
-                setMessages({...messages,data})
+                setMessages([...messages,data])
                 setLoading(false)
             } catch (error) {
                 toast({
